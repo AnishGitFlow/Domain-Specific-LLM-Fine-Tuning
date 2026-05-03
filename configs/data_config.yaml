@@ -1,0 +1,15 @@
+dataset_name: llamafactory/PubMedQA
+dataset_split: train
+text_columns:
+  instruction: instruction
+  input: input
+  output: output
+splits:
+  train: 0.8
+  validation: 0.1
+  test: 0.1
+seed: 42
+max_samples:
+  train:
+  validation:
+  test:

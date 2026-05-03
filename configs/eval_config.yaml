@@ -1,0 +1,14 @@
+metrics:
+  - rouge
+  - bleu
+  - perplexity
+  - latency
+  - memory
+generation:
+  max_new_tokens: 256
+  temperature: 0.2
+  top_p: 0.9
+  do_sample: true
+benchmark:
+  num_samples: 100
+  batch_size: 1

@@ -1,0 +1,41 @@
+# Core ML stack
+# Install torch separately with the CUDA 12.8 index shown in docs/setup.md.
+torch
+torchvision
+torchaudio
+transformers>=4.51.0
+datasets>=3.0.0
+accelerate>=1.6.0
+peft>=0.15.0
+trl>=0.15.0
+bitsandbytes>=0.45.0
+safetensors>=0.4.5
+
+# Evaluation
+evaluate>=0.4.3
+rouge-score
+sacrebleu
+bert-score
+scikit-learn
+
+# Experiment tracking and analysis
+mlflow
+pandas
+numpy
+matplotlib
+seaborn
+tqdm
+pyyaml
+
+# Deployment
+streamlit
+fastapi
+uvicorn
+pydantic
+
+# Utilities
+python-dotenv
+rich
+psutil
+sentencepiece
+protobuf
