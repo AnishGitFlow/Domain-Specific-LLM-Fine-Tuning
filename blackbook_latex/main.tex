@@ -1,0 +1,307 @@
+\documentclass[12pt,a4paper]{report}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{geometry}
+\geometry{a4paper, left=1.5in, right=1in, top=1in, bottom=1in}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{tabularx}
+
+% Code snippet formatting
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    backgroundcolor=\color{gray!10},
+    frame=single,
+    rulecolor=\color{black!30},
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    commentstyle=\color{green!60!black}
+}
+
+\begin{document}
+
+% ----------------------------------------------------------------------
+% 1. Title Page
+% ----------------------------------------------------------------------
+\begin{titlepage}
+    \begin{center}
+        \vspace*{1cm}
+        
+        \Huge
+        \textbf{PubMedQA QLoRA Assistant}
+        
+        \vspace{0.5cm}
+        \LARGE
+        A Production-Style Biomedical Question Answering System
+        
+        \vspace{1.5cm}
+        
+        \textbf{A Master's Major Project Report}
+        
+        \vspace{0.5cm}
+        \large
+        Submitted in partial fulfillment of the requirements for the degree of\\
+        \textbf{Master of Science / Technology}
+        
+        \vspace{1.5cm}
+        
+        \textbf{Submitted by:}\\
+        Student Name \\
+        [Registration Number]
+        
+        \vspace{1.5cm}
+        
+        \textbf{Under the Guidance of:}\\
+        Guide Name\\
+        [Designation]
+        
+        \vspace{2cm}
+        
+        % Uncomment and add your university logo
+        % \includegraphics[width=0.3\textwidth]{logo.png}
+        
+        \large
+        \textbf{Department of Computer Science}\\
+        \textbf{University Name}\\
+        \textbf{Academic Year 2025-2026}
+        
+    \end{center}
+\end{titlepage}
+
+% ----------------------------------------------------------------------
+% 2. Certificate
+% ----------------------------------------------------------------------
+\newpage
+\thispagestyle{empty}
+\begin{center}
+    \Large \textbf{CERTIFICATE}
+\end{center}
+\vspace{1cm}
+This is to certify that the Master's Major Project entitled \textbf{"PubMedQA QLoRA Assistant"} submitted by \textbf{[Student Name]} in partial fulfillment of the requirements for the award of the degree of Master of Science/Technology in Computer Science/Data Science at \textbf{[University Name]}, is a bona fide record of the work carried out by them under my supervision and guidance. 
+
+The results embodied in this report have not been submitted to any other University or Institution for the award of any degree or diploma.
+
+\vspace{3cm}
+\noindent
+\begin{tabular}{@{}p{0.5\textwidth}p{0.5\textwidth}@{}}
+\textbf{Guide Name} & \textbf{Head of Department} \\
+Project Guide & Department of Computer Science \\
+\end{tabular}
+
+% ----------------------------------------------------------------------
+% 3. Declaration
+% ----------------------------------------------------------------------
+\newpage
+\thispagestyle{empty}
+\begin{center}
+    \Large \textbf{DECLARATION}
+\end{center}
+\vspace{1cm}
+I hereby declare that the Master's Major Project report entitled \textbf{"PubMedQA QLoRA Assistant"} is an authentic record of my own work carried out at \textbf{[University Name]} under the guidance of \textbf{[Guide Name]}. This work is submitted in partial fulfillment of the requirements for the degree of Master of Science/Technology. The matter embodied in this report has not been submitted by me for the award of any other degree or diploma.
+
+\vspace{3cm}
+\noindent
+\textbf{Date:} \hspace{8cm} \textbf{[Student Name]}
+
+% ----------------------------------------------------------------------
+% 4. Acknowledgement
+% ----------------------------------------------------------------------
+\newpage
+\thispagestyle{empty}
+\begin{center}
+    \Large \textbf{ACKNOWLEDGEMENT}
+\end{center}
+\vspace{1cm}
+I would like to express my profound gratitude to my project guide, \textbf{[Guide Name]}, for their continuous support, valuable insights, and technical guidance throughout the development of this project. Their expertise was instrumental in shaping the research and implementation of this biomedical language model pipeline.
+
+I am also deeply grateful to the Department of Computer Science at \textbf{[University Name]} for providing the necessary infrastructure and academic environment. Finally, I extend my thanks to the open-source community, particularly Hugging Face, for providing the foundational models and tools that made this research possible.
+
+% ----------------------------------------------------------------------
+% 5. Abstract
+% ----------------------------------------------------------------------
+\newpage
+\pagenumbering{roman}
+\begin{center}
+    \Large \textbf{ABSTRACT}
+\end{center}
+\vspace{1cm}
+Large Language Models (LLMs) have demonstrated exceptional capabilities across general natural language processing tasks; however, their direct application in specialized domains, such as biomedical question answering, is often hindered by hallucination risks, vocabulary mismatch, and computational overhead. This thesis presents the \textbf{PubMedQA QLoRA Assistant}, an end-to-end, production-grade system designed to adapt the state-of-the-art \texttt{Qwen2.5-1.5B-Instruct} model to the biomedical domain using the PubMedQA dataset.
+
+To overcome the immense computational requirements typically associated with fine-tuning LLMs, this research employs Parameter-Efficient Fine-Tuning (PEFT) techniques, specifically Quantized Low-Rank Adaptation (QLoRA). By quantizing the base model weights to 4-bit NormalFloat (NF4) representations and inserting trainable low-rank matrices into the self-attention layers, the system achieves highly effective domain adaptation on consumer-grade hardware (NVIDIA RTX 5070, 12GB VRAM).
+
+The pipeline encompasses dataset preparation, base model evaluation, QLoRA fine-tuning via the TRL \texttt{SFTTrainer}, and rigorous adapter benchmarking. Experiments tracked comprehensively using MLflow reveal that the fine-tuned adapter significantly improves biomedical factual alignment, evidenced by a BLEU score increase of +1.571, an enhanced ROUGE-L score of +0.049, and a perplexity reduction of 1.003 compared to the baseline model. Furthermore, generation latency was drastically improved by 2.052 seconds on average.
+
+To demonstrate production readiness, the system integrates a dual-surface deployment architecture: an interactive Streamlit frontend for visual experimentation and a highly concurrent FastAPI backend for programmatic inference. The system also introduces a robust GGUF export workflow utilizing \texttt{llama.cpp} for subsequent local edge deployments. The results of this study confirm that QLoRA is a highly viable and computationally efficient methodology for adapting general-purpose LLMs to critical, knowledge-dense domains without sacrificing inference speed or necessitating enterprise-scale compute clusters.
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\newpage
+\pagenumbering{arabic}
+
+% ----------------------------------------------------------------------
+% Chapter 1: Introduction
+% ----------------------------------------------------------------------
+\chapter{Introduction}
+
+\section{Background}
+The rapid evolution of Transformer-based Large Language Models (LLMs) has fundamentally altered the landscape of Artificial Intelligence. Models like GPT-4, Llama 3, and Qwen have achieved near-human proficiency in general language understanding, reasoning, and generation. However, deploying these generalist models directly into specialized fields such as healthcare and biomedicine presents substantial challenges. Biomedical literature is characterized by highly specific nomenclature, complex relational contexts, and an absolute requirement for factual precision. When generalist LLMs are queried on medical literature, they often exhibit "hallucinations"—generating plausible but factually incorrect information.
+
+\section{Problem Statement}
+General-purpose instruction-tuned LLMs struggle with biomedical literature due to vocabulary mismatch and a lack of deep domain exposure during initial pre-training. Specifically, the core problems this project addresses are:
+\begin{itemize}
+    \item \textbf{Computational Constraints:} Fine-tuning an LLM to learn biomedical terminology traditionally requires inaccessible enterprise hardware.
+    \item \textbf{Domain Hallucination:} Out-of-the-box LLMs tend to fabricate medical facts when faced with highly specific inquiries.
+    \item \textbf{Deployment Friction:} Transporting a fine-tuned model into a usable, lightweight software application often requires complex infrastructure.
+    \item \textbf{Benchmarking Complexity:} Objectively measuring the improvement of a fine-tuned generative model requires a robust pipeline of automated metrics.
+\end{itemize}
+
+\section{Objectives}
+\textbf{Primary Objectives:}
+\begin{enumerate}
+    \item Build an end-to-end, reproducible ML pipeline for fine-tuning LLMs on biomedical text.
+    \item Adapt \texttt{Qwen2.5-1.5B-Instruct} using QLoRA specifically for the PubMedQA dataset.
+\end{enumerate}
+
+\textbf{Technical Objectives:}
+\begin{enumerate}
+    \item Execute the entire training pipeline within the 12GB VRAM limits of consumer GPUs.
+    \item Create a strict benchmarking framework to directly compare the 4-bit base model against the adapted LoRA model.
+    \item Structure the repository using industry best practices.
+    \item Provide APIs (FastAPI) and UIs (Streamlit) for end-user interaction.
+\end{enumerate}
+
+% ----------------------------------------------------------------------
+% Chapter 2: Literature Survey
+% ----------------------------------------------------------------------
+\chapter{Literature Survey}
+
+\section{Large Language Models in Healthcare}
+Historically, biomedical NLP relied on specialized, smaller models like BioBERT or ClinicalBERT, which utilized the encoder-only BERT architecture. While excellent at extraction and classification, these models lacked the generative capabilities required for complex Question Answering (QA). With the advent of decoder-only LLMs, research pivoted toward prompting strategies. However, studies show that zero-shot prompting of general LLMs on medical data often yields sub-optimal specificity \cite{pubmedqa}.
+
+\section{Parameter-Efficient Fine-Tuning (PEFT)}
+To address the prohibitive cost of full-parameter tuning, Hu et al. introduced \textbf{LoRA (Low-Rank Adaptation)} in 2021 \cite{lora}. LoRA freezes the pre-trained model weights and injects trainable rank decomposition matrices into the Transformer architecture. This drastically reduces the number of trainable parameters while maintaining performance comparable to full fine-tuning.
+
+\section{QLoRA: Efficient Finetuning of Quantized LLMs}
+Dettmers et al. (2023) advanced PEFT by introducing \textbf{QLoRA} \cite{qlora}. QLoRA backpropagates gradients through a frozen, 4-bit quantized pretrained language model into Low Rank Adapters (LoRA). The authors introduced several innovations, including the 4-bit NormalFloat (NF4) data type, double quantization, and Paged Optimizers. QLoRA enables the fine-tuning of large parameter models on standard consumer GPUs.
+
+% ----------------------------------------------------------------------
+% Chapter 3: System Architecture
+% ----------------------------------------------------------------------
+\chapter{System Architecture}
+
+\section{System Requirements}
+\begin{itemize}
+    \item \textbf{GPU:} NVIDIA RTX 3060/4070/5070 with a minimum of 12 GB VRAM.
+    \item \textbf{RAM:} Minimum 16 GB, Recommended 32 GB.
+    \item \textbf{Software:} Python 3.10+, CUDA Toolkit 12.8+, PyTorch, Transformers, PEFT, TRL, MLflow.
+\end{itemize}
+
+\section{Architecture Design}
+The architecture follows a strict decoupled, modular design, isolating data, training, evaluation, and inference.
+
+\begin{itemize}
+    \item \textbf{Data Pipeline:} Loads raw PubMedQA, normalizes, and outputs JSONL splits.
+    \item \textbf{Training Pipeline:} Uses TRL \texttt{SFTTrainer} to fine-tune the 4-bit base model, logging to MLflow.
+    \item \textbf{Evaluation Pipeline:} Computes ROUGE, BLEU, and Perplexity metrics.
+    \item \textbf{Deployment Pipeline:} FastAPI and Streamlit provide programmatic and visual interfaces.
+\end{itemize}
+
+\section{QLoRA Technical Deep Dive}
+To fit the 1.5B model into limited VRAM, QLoRA is implemented:
+\begin{enumerate}
+    \item \textbf{NF4 Quantization:} The base model weights are loaded via \texttt{bitsandbytes} using the 4-bit NormalFloat data type.
+    \item \textbf{Double Quantization:} The quantization constants themselves are quantized from 32-bit to 8-bit.
+    \item \textbf{LoRA Adapters:} Instead of updating the 4-bit weights, Low-Rank Adaptation matrices ($A$ and $B$) are injected alongside the linear layers.
+\end{enumerate}
+The forward pass is defined as:
+\begin{equation}
+    h = W_0x + \Delta Wx = W_0x + BAx
+\end{equation}
+Where Rank ($r=16$) defines the dimension of the inner matrices, and Alpha ($\alpha=32$) acts as a scaling factor.
+
+% ----------------------------------------------------------------------
+% Chapter 4: Implementation
+% ----------------------------------------------------------------------
+\chapter{Implementation Details}
+
+\section{Data Pipeline}
+The data pipeline (`src/data/pipeline.py`) normalizes raw PubMedQA data into a ChatML-style instruction format to effectively train the Qwen instruction model.
+\begin{lstlisting}[language=Python, caption=Prompt Formatting Logic]
+def build_prompt(question: str, context: str) -> str:
+    return f"Context: {context}\n\nQuestion: {question}\n\nAnswer:"
+\end{lstlisting}
+
+\section{Training Pipeline}
+The core training loop is managed by the \texttt{SFTTrainer} from the Hugging Face \texttt{trl} library. Key configurations include:
+\begin{itemize}
+    \item \textbf{Optimizer:} \texttt{paged\_adamw\_8bit} prevents OOM crashes by paging out to CPU RAM.
+    \item \textbf{Gradient Checkpointing:} Drops intermediate activations during forward pass to save VRAM.
+\end{itemize}
+
+\section{Inference and Deployment}
+Inference handles token generation using configurable parameters such as temperature and top-p sampling. The project is fully containerized using Docker, exposing a Streamlit application on port 7860 and a FastAPI service on port 8000.
+
+% ----------------------------------------------------------------------
+% Chapter 5: Results and Analysis
+% ----------------------------------------------------------------------
+\chapter{Results and Benchmark Analysis}
+
+\section{Evaluation Metrics}
+The system evaluates the models on 100 held-out test samples. The metrics computed include ROUGE (1, 2, L), BLEU, Perplexity (PPL), and generation latency.
+
+\section{Benchmark Comparison}
+The benchmark results clearly demonstrate the effectiveness of the QLoRA fine-tuning approach:
+
+\begin{table}[h]
+\centering
+\caption{Benchmark Comparison (Base vs. Fine-Tuned)}
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Metric} & \textbf{Base Model} & \textbf{Fine-Tuned} & \textbf{Change} \\
+\midrule
+BLEU & 3.266 & 4.837 & +1.571 \\
+ROUGE-L & 0.167 & 0.216 & +0.049 \\
+Perplexity & 10.342 & 9.340 & -1.003 \\
+Mean latency & 4.206s & 2.155s & -2.052s \\
+Peak memory & 1236.8 MB & 1307.3 MB & +70.4 MB \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretation:}
+The significant decrease in Perplexity proves the model successfully learned the statistical distribution of the biomedical terminology. ROUGE and BLEU increases indicate outputs are structurally closer to ground truths. Latency dropped significantly as the model learned to answer concisely.
+
+% ----------------------------------------------------------------------
+% Chapter 6: Conclusion
+% ----------------------------------------------------------------------
+\chapter{Conclusion and Future Work}
+
+\section{Conclusion}
+The \textbf{PubMedQA QLoRA Assistant} successfully demonstrates the viability of adapting lightweight, open-source Large Language Models to highly specialized domains using consumer-grade hardware. By systematically applying 4-bit quantization and Low-Rank Adaptation, the pipeline trained an effective adapter without succumbing to traditional hardware bottlenecks. The resulting benchmark metrics conclusively prove that the fine-tuned model is superior to its generalist counterpart.
+
+\section{Future Enhancements}
+\begin{itemize}
+    \item \textbf{Retrieval-Augmented Generation (RAG):} Integrating a vector database to pull PubMed abstracts dynamically.
+    \item \textbf{RLHF:} Training a reward model based on clinician feedback.
+    \item \textbf{Multi-GPU Parallelism:} Adapting the codebase to utilize DeepSpeed for scaling.
+\end{itemize}
+
+% ----------------------------------------------------------------------
+% References
+% ----------------------------------------------------------------------
+\bibliographystyle{ieeetr}
+\bibliography{references}
+
+\end{document}
