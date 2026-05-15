@@ -1,0 +1,13 @@
+{
+  "rouge1": 0.27324993866367653,
+  "rouge2": 0.0724518653026814,
+  "rougeL": 0.1667672108235884,
+  "bleu": 3.2662401327709536,
+  "latency_mean_seconds": 4.20625892799988,
+  "latency_p50_seconds": 4.1459216000075685,
+  "latency_p95_seconds": 7.14716401000478,
+  "peak_memory_mean_mb": 1167.5957666015624,
+  "peak_memory_max_mb": 1236.8740234375,
+  "perplexity": 10.342343086949585,
+  "num_samples": 100.0
+}
